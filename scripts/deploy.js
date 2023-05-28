@@ -5,14 +5,14 @@ async function main() {
   const [deployer] = await ethers.getSigners();
 
   // Deploy contract
-  const CertificateVerification = await ethers.getContractFactory(
-    "CertificateVerification"
+  const FashionChainToken = await ethers.getContractFactory(
+    "FashionChainToken"
   );
-  const certificateVerification = await CertificateVerification.deploy();
-  await certificateVerification.deployed();
+  const fashionChainToken = await FashionChainToken.deploy();
+  await fashionChainToken.deployed();
 
   console.log(
-    `Deployed CertificateVerification Contract at: ${certificateVerification.address}\n`
+    `Deployed CertificateVerification Contract at: ${fashionChainToken.address}\n`
   );
 }
 
