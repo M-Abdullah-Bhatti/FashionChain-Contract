@@ -12,6 +12,18 @@ contract FashionChainToken is ERC20, Ownable {
         _mint(msg.sender, 10000000 * 10 ** decimals());
     }
 
+    // Mappings
+    mapping(address => bool) public isOwnerShip;
+
+    // modifier
+    modifier onlyAdmin() {
+        require(
+            isOwnerShip[msg.sender] == true,
+            "role not granted: you don't have ownership"
+        );
+        _;
+    }
+
     function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount);
     }
@@ -19,7 +31,7 @@ contract FashionChainToken is ERC20, Ownable {
     function transfer(
         address to,
         uint256 amount
-    ) public override onlyOwner returns (bool) {
+    ) public override onlyOwner onlyAdmin returns (bool) {
         // Round up to the nearest multiple of 10
         if (amount % 10 != 0) {
             amount = amount.add(10 - (amount % 10));
@@ -29,5 +41,10 @@ contract FashionChainToken is ERC20, Ownable {
         uint256 transferAmount = amount.mul(40).div(100);
 
         return super.transfer(to, transferAmount);
+    }
+
+    // grant role to user as admin by admin
+    function grantRole(address to) public onlyAdmin {
+        isOwnerShip[to] = true;
     }
 }
