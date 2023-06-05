@@ -17,6 +17,7 @@ First, amke the .env file on node with the variable:
 PRIVATE_KEY = paste_your_private_key here
 SEPOLIA_RPC_URL = paste_your_sepolia_rpc_url
 ETHERSCAN_API_KEY=paste_your_etherscan_api_key
+
 Then run this command:
 npx hardhat run .\scripts\deploy.js --network sepolia
 
