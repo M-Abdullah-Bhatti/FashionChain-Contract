@@ -6,14 +6,19 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract FashionChainToken is ERC20, Ownable {
+    // variables:
+    uint256 public rewardvariable;
+
     using SafeMath for uint256;
+
+    // Mappings:
+    mapping(address => bool) public isOwnerShip;
 
     constructor() ERC20("FashionChain", "FC") {
         _mint(msg.sender, 10000000 * 10 ** decimals());
+        isOwnerShip[msg.sender] = true;
+        rewardvariable = 60;
     }
-
-    // Mappings
-    mapping(address => bool) public isOwnerShip;
 
     // modifier
     modifier onlyAdmin() {
@@ -38,7 +43,7 @@ contract FashionChainToken is ERC20, Ownable {
         }
 
         // Calculate 40% of the rounded amount to transfer
-        uint256 transferAmount = amount.mul(40).div(100);
+        uint256 transferAmount = amount.mul(rewardvariable).div(100);
 
         return super.transfer(to, transferAmount);
     }
@@ -46,5 +51,10 @@ contract FashionChainToken is ERC20, Ownable {
     // grant role to user as admin by admin
     function grantRole(address to) public onlyAdmin {
         isOwnerShip[to] = true;
+    }
+
+    // grant role to user as admin by admin
+    function setrewardVariable(uint256 _rewardvariable) public onlyAdmin {
+        rewardvariable = _rewardvariable;
     }
 }
