@@ -5,7 +5,13 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
+
+/// role not granted
+error NFCertificate__RoleNotGranted();
+
+
 contract FashionChainToken is ERC20, Ownable {
+
     // variables:
     uint256 public rewardvariable;
 
@@ -16,19 +22,19 @@ contract FashionChainToken is ERC20, Ownable {
 
     constructor() ERC20("FashionChain", "FC") {
         _mint(msg.sender, 10000000 * 10 ** decimals());
-        isOwnerShip[msg.sender] = true;
-        rewardvariable = 60;
+         isOwnerShip[msg.sender] = true;
+         rewardvariable = 60;
     }
 
-    // modifier
+
+
+     // modifier
     modifier onlyAdmin() {
-        require(
-            isOwnerShip[msg.sender] == true,
-            "role not granted: you don't have ownership"
-        );
+        if (isOwnerShip[msg.sender] != true) {
+            revert NFCertificate__RoleNotGranted();
+        }
         _;
     }
-
     function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount);
     }
@@ -36,7 +42,7 @@ contract FashionChainToken is ERC20, Ownable {
     function transfer(
         address to,
         uint256 amount
-    ) public override onlyOwner onlyAdmin returns (bool) {
+    ) public override onlyAdmin returns (bool) {
         // Round up to the nearest multiple of 10
         if (amount % 10 != 0) {
             amount = amount.add(10 - (amount % 10));
@@ -53,7 +59,7 @@ contract FashionChainToken is ERC20, Ownable {
         isOwnerShip[to] = true;
     }
 
-    // grant role to user as admin by admin
+     // grant role to user as admin by admin
     function setrewardVariable(uint256 _rewardvariable) public onlyAdmin {
         rewardvariable = _rewardvariable;
     }
